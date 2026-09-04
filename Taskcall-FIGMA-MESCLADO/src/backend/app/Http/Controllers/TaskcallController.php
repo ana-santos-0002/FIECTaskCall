@@ -10,19 +10,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+//Função de login -> valida o cadastro para o usuário poder acessar
 class TaskcallController extends Controller
 {
-    public function login(Request $request): JsonResponse
+    public function login(Request $request): JsonResponse  //a resposta deve ser em json para passar para o front
     {
+    //validando o campo usuário -> texto de tamanho máximo 100 caracteres
+    //validando o campo senha -> texto de tamanho máximo 100 caracteres
+
         $data = $request->validate([
             'usuario' => ['required', 'string', 'max:100'],
             'senha' => ['required', 'string', 'max:100'],
         ]);
 
-        $usuario = Usuario::query()
-            ->where('email', $data['usuario'])
+        //consulta com o banco de dados
+        $usuario = Usuario::query() // query = consulta
+            ->where('email', $data['usuario']) //aonde o email é exatamente como digitado na table usuarios
             ->orWhere('iuid_usuario', is_numeric($data['usuario']) ? (int) $data['usuario'] : -1)
-            ->first();
+            //ou consulta o iuid_usuarop -> é número?(true) -> vai pegar o int que está no bd
+            //se o usuario digital o email o is_numero vai ser false, e por isso vai mostrar o email e atribuir o código -1
+            ->first();  //mostre o primeiro usuário que encontrar
 
         if (!$usuario || !hash_equals((string) $usuario->senha, (string) $data['senha'])) {
             return response()->json(['message' => 'Usuário ou senha inválidos.'], 401);
