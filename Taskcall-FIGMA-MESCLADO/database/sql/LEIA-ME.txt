@@ -1,0 +1,5 @@
+Banco utilizado pelo projeto: taskcall (MySQL 8, porta 3306).
+
+Os arquivos SQL desta pasta são os dumps fornecidos para as tabelas usuarios, equipamentos, chamados, computador e sala. Eles não criam o banco; crie o banco taskcall antes e importe os arquivos nele.
+
+A aplicação Laravel usa exatamente os nomes de tabelas e colunas desses dumps.
